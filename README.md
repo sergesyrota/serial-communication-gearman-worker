@@ -20,7 +20,7 @@ their commands in gearman and wait for reply.
 
 # Installation
 
-Copy `serial-worker.py` to your folder of choice (e.g. /usr/bin). `chmod +x` the file.
+Copy `gearman-worker.py` to your folder of choice (e.g. /usr/bin). `chmod +x` the file.
 
 See `contrib` folder for init scripts. This will ensure worker will start with system boot. If using local gearman, make
 sure to specify dependency for gearman process, where supported.
