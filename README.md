@@ -24,3 +24,7 @@ Copy `gearman-worker.py` to your folder of choice (e.g. /usr/bin). `chmod +x` th
 
 See `contrib` folder for init scripts. This will ensure worker will start with system boot. If using local gearman, make
 sure to specify dependency for gearman process, where supported.
+
+# Running
+
+Only one worker should be ran per serial port. Gearman task name is specified using `--task` argument.

@@ -10,6 +10,7 @@ import daemon
 import argparse
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--task', help='Gearman task name to register', required=True)
 parser.add_argument('--port', help='Serial port path', default='/dev/ttyUSB0')
 parser.add_argument('--speed', help='Baud rate for serial port', default=115200)
 parser.add_argument('--timeout', help='How long (seconds) to wait for reply after sending a command to device',
@@ -31,9 +32,7 @@ def task_listener_rs485(gearman_worker, gearman_job):
 
 
 gm_worker = gearman.GearmanWorker([args.gearman])
-# gm_worker.set_client_id is optional
-gm_worker.set_client_id('rs485-worker')
-gm_worker.register_task('rs485', task_listener_rs485)
+gm_worker.register_task(args.task, task_listener_rs485)
 
 #Enter our work loop and call gm_worker.after_poll() after each time we timeout/see socket activity
 with daemon.DaemonContext():
