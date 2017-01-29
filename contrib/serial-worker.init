@@ -1,0 +1,69 @@
+#!/bin/sh
+
+# chkconfig: 2345 99 10
+# description: Gearman worker for one-thread serial communication
+
+DAEMON=/usr/bin/serial-worker.py
+PIDFILE=/var/run/serial-worker.pid
+#not implemented
+#DAEMON_USER=rs485
+DAEMON_OPTS="--task=rs485-orange --port=/dev/ttyUSB0"
+DAEMON_NAME="RS485 Orange"
+
+
+# Source function library.
+. /etc/init.d/functions
+
+#echo $PIDFILE
+#exit 0
+
+start () {
+        echo -n "Starting $DAEMON_NAME... "
+#        runuser -s /bin/bash $DAEMON_USER -c "$DAEMON $DAEMON_OPTS &"
+        $DAEMON $DAEMON_OPTS &
+        PID=$!
+        if [ -z $PID ]; then
+            failure
+        else
+            echo $PID > $PIDFILE
+            success
+        fi
+        echo ""
+}
+
+stop () {
+        if [[ -s $PIDFILE ]] ; then
+            echo -n "Stopping $DAEMON_NAME... "
+            killproc -p $PIDFILE python
+#            echo "done!"
+            echo ""
+            rm -f $PIDFILE
+        else
+            echo "$DAEMON_NAME not running."
+        fi
+}
+
+check_status() {
+    status -p $PIDFILE python
+}
+
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    status)
+        check_status
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
